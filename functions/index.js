@@ -10,10 +10,15 @@ setGlobalOptions({maxInstances: 10, region: "europe-central2"});
 
 const smsMdApiKey = defineSecret("SMS_MD_API_KEY");
 
+const OTP_MESSAGES = {
+  ro: (otp) => `Codul tău de verificare: ${otp}. Valabil 5 minute.`,
+  ru: (otp) => `Ваш код подтверждения: ${otp}. Действителен 5 минут.`,
+};
+
 exports.sendOtp = onCall(
     {secrets: [smsMdApiKey], region: "europe-central2"},
     async (request) => {
-      const {phoneNumber} = request.data;
+      const {phoneNumber, language = "ro"} = request.data;
 
       if (
         !phoneNumber ||
@@ -62,7 +67,8 @@ exports.sendOtp = onCall(
       });
 
       // Deliver OTP via SMS.md
-      const message = `Your verification code: ${otp}. Valid for 5 min.`;
+      const messageFn = OTP_MESSAGES[language] || OTP_MESSAGES["ro"];
+      const message = messageFn(otp);
       const smsUrl = new URL("https://api.sms.md/v1/send");
       smsUrl.searchParams.set("from", "viking");
       smsUrl.searchParams.set("to", phoneNumber);

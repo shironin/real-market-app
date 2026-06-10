@@ -11,7 +11,7 @@ import { Colors } from '../theme/colors';
 import { Typography } from '../theme/typography';
 
 export default function EnterNumberScreen() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [countryCode, setCountryCode] = useState('+373');
   const [phoneDigits, setPhoneDigits] = useState('');
   const [loading, setLoading] = useState(false);
@@ -25,7 +25,7 @@ export default function EnterNumberScreen() {
     setError('');
     try {
       const phoneNumber = `${countryCode}${phoneDigits}`;
-      const result = await httpsCallable(getFunctions(undefined, 'europe-central2'), 'sendOtp')({ phoneNumber });
+      const result = await httpsCallable(getFunctions(undefined, 'europe-central2'), 'sendOtp')({ phoneNumber, language });
       const { verificationId, isNewUser } = result.data as {
         verificationId: string;
         isNewUser: boolean;
