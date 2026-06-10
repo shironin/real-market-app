@@ -1,25 +1,36 @@
 {
   "expo": {
-    "name": "real-market-app",
+    "name": "Real Market",
     "slug": "real-market-app",
     "version": "1.0.0",
+    "scheme": "realmarket",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/app-icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.real.market.app",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
-      },
+      "icon": "./assets/app-icon.png",
+      "package": "com.real.market.app",
+      "googleServicesFile": "./google-services.json",
       "predictiveBackGestureEnabled": false
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-router",
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      ["expo-splash-screen", {
+        "image": "./assets/splash.jpg",
+        "resizeMode": "cover",
+        "enableFullScreenImage_legacy": true
+      }],
+      "./plugins/withFirebaseModularHeaders"
+    ]
   }
 }
