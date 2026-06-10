@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native';
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppButton } from '../components/ui/AppButton';
 import { LanguageSwitcher } from '../components/ui/LanguageSwitcher';
@@ -37,7 +37,9 @@ export default function WelcomeScreen() {
           />
           <View style={styles.disclaimer}>
             <Text style={styles.disclaimerText}>{t('welcome.disclaimerText')}</Text>
-            <Text style={styles.disclaimerLink}>{t('welcome.disclaimerLink')}</Text>
+            <TouchableOpacity onPress={() => router.push('/policy')}>
+              <Text style={styles.disclaimerLink}>{t('welcome.disclaimerLink')}</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

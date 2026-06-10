@@ -33,6 +33,7 @@ function RootNavigation() {
       <Stack.Screen name="enter-number" />
       <Stack.Screen name="otp" />
       <Stack.Screen name="profile-edit" />
+      <Stack.Screen name="policy" />
       <Stack.Screen name="(tabs)" options={{ animation: 'fade' }} />
     </Stack>
   );

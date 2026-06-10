@@ -57,6 +57,9 @@ const ro = {
     home: 'Acasă',
     settings: 'Setări',
   },
+  policy: {
+    title: 'Politica de confidențialitate',
+  },
   errors: {
     generic: 'Ceva a mers greșit. Încearcă din nou.',
     invalidOtp: 'Cod incorect. Încearcă din nou.',
@@ -121,6 +124,9 @@ const ru: typeof ro = {
   tabs: {
     home: 'Главная',
     settings: 'Настройки',
+  },
+  policy: {
+    title: 'Политика конфиденциальности',
   },
   errors: {
     generic: 'Что-то пошло не так. Попробуйте снова.',

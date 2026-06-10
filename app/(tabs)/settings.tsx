@@ -98,7 +98,7 @@ export default function SettingsScreen() {
         <SettingsSection title={t('settings.other')}>
           <SettingsRow label={t('settings.appVersion')} value={Constants.expoConfig?.version ?? '—'} />
           <View style={styles.separator} />
-          <SettingsRow label={t('settings.privacyPolicy')} onPress={() => {}} />
+          <SettingsRow label={t('settings.privacyPolicy')} onPress={() => router.push('/policy')} />
         </SettingsSection>
 
         <SettingsSection title={t('settings.dangerZone')}>

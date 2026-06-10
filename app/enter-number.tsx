@@ -1,7 +1,7 @@
 import { getFunctions, httpsCallable } from '@react-native-firebase/functions';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppButton } from '../components/ui/AppButton';
 import { LanguageSwitcher } from '../components/ui/LanguageSwitcher';
@@ -45,6 +45,10 @@ export default function EnterNumberScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
+      <KeyboardAvoidingView
+        style={styles.keyboardAvoiding}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
       <View style={styles.container}>
         <View style={styles.header}>
           <TouchableOpacity style={styles.back} onPress={() => router.back()}>
@@ -76,6 +80,7 @@ export default function EnterNumberScreen() {
           loading={loading}
         />
       </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -84,6 +89,9 @@ const styles = StyleSheet.create({
   safe: {
     flex: 1,
     backgroundColor: Colors.background,
+  },
+  keyboardAvoiding: {
+    flex: 1,
   },
   container: {
     flex: 1,
