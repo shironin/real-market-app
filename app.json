@@ -33,11 +33,18 @@
         {
           "image": "./assets/splash.jpg",
           "resizeMode": "cover",
-          "enableFullScreenImage_legacy": true
+          "backgroundColor": "#dce2f5",
+          "android": {
+            "backgroundColor": "#dce2f5",
+            "drawable": {
+              "icon": "./assets/android-transparent-icon.xml"
+            }
+          }
         }
       ],
       "./plugins/withFirebaseModularHeaders",
-      "expo-font"
+      "expo-font",
+      "./plugins/withAndroidFullscreenSplash"
     ],
     "extra": {
       "router": {},

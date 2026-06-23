@@ -10,24 +10,25 @@ import { LanguageSwitcher } from '../components/ui/LanguageSwitcher';
 import { useLanguage } from '../i18n/LanguageContext';
 import { Colors } from '../theme/colors';
 import { Typography } from '../theme/typography';
+import { sendOtpErrorKey, verifyOtpErrorKey } from '../utils/firebaseError';
 
 const REGION = 'europe-central2';
 
 export default function OTPScreen() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { phone, verificationId: initialVerificationId } =
     useLocalSearchParams<{ phone: string; verificationId: string; isNewUser: string }>();
 
   const [verificationId, setVerificationId] = useState(initialVerificationId);
   const [code, setCode] = useState('');
-  const [countdown, setCountdown] = useState(60);
+  const [countdown, setCountdown] = useState(120);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const startCountdown = () => {
     clearInterval(intervalRef.current!);
-    setCountdown(60);
+    setCountdown(120);
     intervalRef.current = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) { clearInterval(intervalRef.current!); return 0; }
@@ -44,13 +45,13 @@ export default function OTPScreen() {
   const handleResend = async () => {
     setError('');
     try {
-      const result = await httpsCallable(getFunctions(undefined, REGION), 'sendOtp')({ phoneNumber: phone });
+      const result = await httpsCallable(getFunctions(undefined, REGION), 'sendOtp')({ phoneNumber: phone, language });
       const { verificationId: newId } = result.data as { verificationId: string; isNewUser: boolean };
       setVerificationId(newId);
       setCode('');
       startCountdown();
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : t('errors.generic'));
+      setError(t(sendOtpErrorKey(err)));
     }
   };
 
@@ -58,7 +59,6 @@ export default function OTPScreen() {
     if (code.length !== 6 || loading) return;
     setLoading(true);
     setError('');
-    console.log('[OTP] verifyOtp payload:', { verificationId, otp: code });
     try {
       const result = await httpsCallable(getFunctions(undefined, REGION), 'verifyOtp')({ verificationId, otp: code });
       const { customToken } = result.data as { customToken: string };
@@ -66,8 +66,7 @@ export default function OTPScreen() {
       // _layout.tsx auth guard handles navigation based on profile completeness
     } catch (err: unknown) {
       console.error(err);
-      const msg = err instanceof Error ? err.message : t('errors.generic');
-      setError(msg.includes('Incorrect') ? t('errors.invalidOtp') : msg);
+      setError(t(verifyOtpErrorKey(err)));
       setLoading(false);
     }
   };

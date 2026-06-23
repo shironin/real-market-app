@@ -9,6 +9,7 @@ import { PhoneInput } from '../components/ui/PhoneInput';
 import { useLanguage } from '../i18n/LanguageContext';
 import { Colors } from '../theme/colors';
 import { Typography } from '../theme/typography';
+import { sendOtpErrorKey } from '../utils/firebaseError';
 
 export default function EnterNumberScreen() {
   const { t, language } = useLanguage();
@@ -30,14 +31,13 @@ export default function EnterNumberScreen() {
         verificationId: string;
         isNewUser: boolean;
       };
-      console.log('[sendOtp] verificationId:', verificationId);
       router.push({
         pathname: '/otp',
         params: { phone: phoneNumber, verificationId, isNewUser: String(isNewUser) },
       });
     } catch (err: unknown) {
       console.error(err);
-      setError(err instanceof Error ? err.message : t('errors.generic'));
+      setError(t(sendOtpErrorKey(err)));
     } finally {
       setLoading(false);
     }

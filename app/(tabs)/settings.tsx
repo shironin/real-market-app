@@ -1,8 +1,12 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getFunctions, httpsCallable } from '@react-native-firebase/functions';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useState } from 'react';
+import { ActivityIndicator, Alert, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../context/AuthContext';
+import { useCard } from '../../context/CardContext';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { Colors } from '../../theme/colors';
 import { Typography } from '../../theme/typography';
@@ -46,7 +50,9 @@ function SettingsSection({ title, children }: SettingsSectionProps) {
 
 export default function SettingsScreen() {
   const { t } = useLanguage();
-  const { profile, signOut } = useAuth();
+  const { user, profile, signOut } = useAuth();
+  const { card } = useCard();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const fullName = [profile?.firstName, profile?.lastName].filter(Boolean).join(' ');
   const initials = [profile?.firstName?.[0], profile?.lastName?.[0]]
@@ -59,8 +65,52 @@ export default function SettingsScreen() {
     router.replace('/');
   };
 
+  const handleDeleteData = () => {
+    Alert.alert(
+      t('settings.deleteDataTitle'),
+      t('settings.deleteDataMessage'),
+      [
+        { text: t('settings.deleteDataCancel'), style: 'cancel' },
+        {
+          text: t('settings.deleteData'),
+          style: 'destructive',
+          onPress: async () => {
+            setIsDeleting(true);
+            try {
+              const fn = getFunctions(undefined, 'europe-central2');
+              if (card?.card_number) {
+                await httpsCallable(fn, 'deleteDiscountCard')({
+                  cardNumber: card.card_number,
+                });
+              }
+              await AsyncStorage.removeItem('@discount_card');
+              await httpsCallable(fn, 'deleteAccount')({});
+              await signOut();
+              router.replace('/');
+            } catch {
+              setIsDeleting(false);
+              Alert.alert(t('settings.deleteDataError'));
+            }
+          },
+        },
+      ],
+    );
+  };
+
   return (
-    <SafeAreaView style={styles.safe} edges={['top']}>
+    <>
+      <Modal
+        visible={isDeleting}
+        transparent
+        animationType="fade"
+        onRequestClose={() => {}}
+      >
+        <View style={styles.loadingOverlay}>
+          <ActivityIndicator size="large" color={Colors.primary} />
+        </View>
+      </Modal>
+
+      <SafeAreaView style={styles.safe} edges={['top']}>
       <View style={styles.header}>
         <Text style={styles.pageTitle}>{t('settings.title')}</Text>
       </View>
@@ -90,9 +140,9 @@ export default function SettingsScreen() {
         </SettingsSection>
 
         <SettingsSection title={t('settings.card')}>
-          <SettingsRow label={t('settings.cardNumber')} value="1234 5678 9012 3456" />
+          <SettingsRow label={t('settings.cardNumber')} value={card?.card_number ?? '—'} />
           <View style={styles.separator} />
-          <SettingsRow label={t('settings.discount')} value="5%" />
+          <SettingsRow label={t('settings.discount')} value={card ? `${card.card_discount}%` : '—'} />
         </SettingsSection>
 
         <SettingsSection title={t('settings.other')}>
@@ -104,14 +154,21 @@ export default function SettingsScreen() {
         <SettingsSection title={t('settings.dangerZone')}>
           <SettingsRow label={t('settings.logout')} onPress={handleSignOut} destructive />
           <View style={styles.separator} />
-          <SettingsRow label={t('settings.deleteData')} onPress={() => {}} destructive />
+          <SettingsRow label={t('settings.deleteData')} onPress={handleDeleteData} destructive />
         </SettingsSection>
       </ScrollView>
     </SafeAreaView>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
+  loadingOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   safe: {
     flex: 1,
     backgroundColor: Colors.background,

@@ -1,5 +1,4 @@
-import { getAuth } from '@react-native-firebase/auth';
-import { getFirestore, doc, updateDoc } from '@react-native-firebase/firestore';
+import { getFunctions, httpsCallable } from '@react-native-firebase/functions';
 import { router, Stack, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 import {
@@ -47,9 +46,7 @@ export default function ProfileEditScreen() {
     setLoading(true);
     setError('');
     try {
-      const uid = getAuth().currentUser?.uid;
-      if (!uid) throw new Error('Not authenticated');
-      await updateDoc(doc(getFirestore(), 'users', uid), {
+      await httpsCallable(getFunctions(undefined, 'europe-central2'), 'updateProfile')({
         firstName: firstName.trim(),
         lastName: lastName.trim(),
       });

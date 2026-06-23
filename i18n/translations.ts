@@ -3,7 +3,7 @@ const ro = {
     subtitle: 'Aveți mereu acces la cardul dvs. de reduceri — fără cozi și fără plastic.',
     start: 'Începe',
     disclaimerText: 'Continuând, acceptați',
-    disclaimerLink: 'termenii de utilizare',
+    disclaimerLink: 'politica de confidențialitate',
   },
   enterNumber: {
     back: '← Înapoi',
@@ -52,6 +52,10 @@ const ro = {
     dangerZone: 'Zonă periculoasă',
     logout: 'Deconectare',
     deleteData: 'Ștergeți datele mele',
+    deleteDataTitle: 'Ștergeți datele?',
+    deleteDataMessage: 'Cardul și contul dvs. vor fi șterse definitiv. Această acțiune nu poate fi anulată.',
+    deleteDataCancel: 'Anulează',
+    deleteDataError: 'Nu am putut șterge datele. Încearcă din nou.',
   },
   tabs: {
     home: 'Acasă',
@@ -63,6 +67,16 @@ const ro = {
   errors: {
     generic: 'Ceva a mers greșit. Încearcă din nou.',
     invalidOtp: 'Cod incorect. Încearcă din nou.',
+    invalidPhone: 'Număr de telefon invalid.',
+    tooManyRequests: 'Prea multe încercări. Reîncercați mai târziu.',
+    otpExpired: 'Codul a expirat. Solicitați un cod nou.',
+    sessionNotFound: 'Sesiunea a expirat. Solicitați un cod nou.',
+  },
+  card: {
+    title: 'CARD DE REDUCERE',
+    defaultHolder: 'Participant',
+    loadError: 'Nu am putut încărca cardul.',
+    retry: 'Încearcă din nou',
   },
 } as const;
 
@@ -71,7 +85,7 @@ const ru: typeof ro = {
     subtitle: 'Всегда имейте доступ к вашей дисконтной карте — без очередей и пластика.',
     start: 'Начать',
     disclaimerText: 'Продолжая, вы принимаете',
-    disclaimerLink: 'условия использования',
+    disclaimerLink: 'политику конфиденциальности',
   },
   enterNumber: {
     back: '← Назад',
@@ -120,6 +134,10 @@ const ru: typeof ro = {
     dangerZone: 'Опасная зона',
     logout: 'Выйти из аккаунта',
     deleteData: 'Удалить мои данные',
+    deleteDataTitle: 'Удалить данные?',
+    deleteDataMessage: 'Ваша карта и аккаунт будут удалены навсегда. Это действие нельзя отменить.',
+    deleteDataCancel: 'Отмена',
+    deleteDataError: 'Не удалось удалить данные. Попробуйте снова.',
   },
   tabs: {
     home: 'Главная',
@@ -131,6 +149,16 @@ const ru: typeof ro = {
   errors: {
     generic: 'Что-то пошло не так. Попробуйте снова.',
     invalidOtp: 'Неверный код. Попробуйте снова.',
+    invalidPhone: 'Неверный формат номера телефона.',
+    tooManyRequests: 'Слишком много попыток. Попробуйте позже.',
+    otpExpired: 'Код истёк. Запросите новый код.',
+    sessionNotFound: 'Сессия истекла. Запросите новый код.',
+  },
+  card: {
+    title: 'КАРТА СКИДКИ',
+    defaultHolder: 'Участник',
+    loadError: 'Не удалось загрузить карту.',
+    retry: 'Попробовать снова',
   },
 };
 

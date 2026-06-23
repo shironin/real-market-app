@@ -6,6 +6,8 @@ export interface UserProfile {
   firstName?: string;
   lastName?: string;
   phoneNumber: string;
+  cardNumber?: string;
+  cardId?: string;
 }
 
 interface AuthContextValue {

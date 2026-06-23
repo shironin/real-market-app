@@ -2,6 +2,7 @@ import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { AuthProvider, useAuth } from '../context/AuthContext';
+import { CardProvider } from '../context/CardContext';
 import { LanguageProvider } from '../i18n/LanguageContext';
 import { Colors } from '../theme/colors';
 
@@ -43,8 +44,10 @@ export default function RootLayout() {
   return (
     <LanguageProvider>
       <AuthProvider>
-        <StatusBar style="dark" />
-        <RootNavigation />
+        <CardProvider>
+          <StatusBar style="dark" />
+          <RootNavigation />
+        </CardProvider>
       </AuthProvider>
     </LanguageProvider>
   );

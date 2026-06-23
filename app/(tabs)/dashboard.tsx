@@ -1,8 +1,11 @@
+import { useFocusEffect } from 'expo-router';
+import { useCallback } from 'react';
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BarcodeCard } from '../../components/BarcodeCard';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { useAuth } from '../../context/AuthContext';
+import { useCard } from '../../context/CardContext';
 import { Colors } from '../../theme/colors';
 import { Typography } from '../../theme/typography';
 import { LanguageSwitcher } from "../../components/ui/LanguageSwitcher";
@@ -25,7 +28,16 @@ function DashboardHeader() {
 export default function DashboardScreen() {
   const { t } = useLanguage();
   const { profile } = useAuth();
-  const holderName = [profile?.firstName, profile?.lastName].filter(Boolean).join(' ');
+  const { card, loading, error, refreshCard } = useCard();
+
+  useFocusEffect(
+    useCallback(() => {
+      refreshCard();
+    }, [refreshCard]),
+  );
+
+  const holderName = card?.client_name
+    ?? [profile?.firstName, profile?.lastName].filter(Boolean).join(' ');
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
@@ -37,8 +49,11 @@ export default function DashboardScreen() {
         showsVerticalScrollIndicator={false}
       >
         <BarcodeCard
-          cardNumber="1234 5678 9012 3456"
+          cardNumber={card?.card_number}
           holderName={holderName}
+          isLoading={loading}
+          error={error}
+          onRetry={refreshCard}
         />
 
         <Text style={styles.sectionSubtitle}>{t('dashboard.cardSubtitle')}</Text>
@@ -60,6 +75,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 24,
+    paddingTop: 12,
     paddingBottom: 16,
     backgroundColor: Colors.background,
   },
