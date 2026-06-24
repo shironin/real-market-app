@@ -8,7 +8,7 @@
     "icon": "./assets/app-icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.real.market.app",
       "googleServicesFile": "./GoogleService-Info.plist",
       "infoPlist": {
