@@ -57,7 +57,8 @@ async function discountFetch(path, options = {}) {
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
-// Test user for App Store / Play Market review — bypasses SMS and external card API.
+// Test user for App Store / Play Market review.
+// Bypasses SMS delivery and the external card API.
 const TEST_PHONE = "+37360111222";
 const TEST_OTP = "000000";
 const TEST_CARD_NUMBER = "1234567891011";
