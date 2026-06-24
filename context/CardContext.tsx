@@ -70,8 +70,10 @@ export function CardProvider({ children }: { children: React.ReactNode }) {
     }
     isFetching.current = true;
 
-    if (!silent) setLoading(true);
-    setError(null);
+    if (!silent) {
+      setLoading(true);
+      setError(null);
+    }
 
     try {
       const fn = getFunctions(undefined, REGION);
@@ -120,8 +122,9 @@ export function CardProvider({ children }: { children: React.ReactNode }) {
         details: err?.details,
         raw: err,
       });
-      const message: string = err?.message ?? 'Failed to load card';
-      setError(message);
+      if (!silent) {
+        setError(err?.message ?? 'Failed to load card');
+      }
     } finally {
       setLoading(false);
       isFetching.current = false;
@@ -155,8 +158,8 @@ export function CardProvider({ children }: { children: React.ReactNode }) {
   }, [user]);
 
   const refreshCard = useCallback(
-    () => fetchOrCreate(card !== null),
-    [fetchOrCreate, card],
+    () => fetchOrCreate(card !== null || !!profile?.cardNumber),
+    [fetchOrCreate, card, profile?.cardNumber],
   );
 
   return (

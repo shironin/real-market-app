@@ -34,17 +34,18 @@
           "image": "./assets/splash.jpg",
           "resizeMode": "cover",
           "backgroundColor": "#dce2f5",
+          "ios": {
+            "enableFullScreenImage_legacy": true
+          },
           "android": {
-            "backgroundColor": "#dce2f5",
-            "drawable": {
-              "icon": "./assets/android-transparent-icon.xml"
-            }
+            "image": "./assets/images/logo.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#dce2f5"
           }
         }
       ],
       "./plugins/withFirebaseModularHeaders",
-      "expo-font",
-      "./plugins/withAndroidFullscreenSplash"
+      "expo-font"
     ],
     "extra": {
       "router": {},

@@ -57,6 +57,17 @@ async function discountFetch(path, options = {}) {
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
 
+// Test user for App Store / Play Market review — bypasses SMS and external card API.
+const TEST_PHONE = "+37360111222";
+const TEST_OTP = "000000";
+const TEST_CARD_NUMBER = "1234567891011";
+const TEST_CARD_DATA = {
+  card_id: "test-card-id-001",
+  card_number: TEST_CARD_NUMBER,
+  card_discount: 5,
+  client_name: "User Test",
+};
+
 const OTP_MESSAGES = {
   ro: (otp) => `Codul tău de verificare: ${otp}. Valabil 5 minute.`,
   ru: (otp) => `Ваш код подтверждения: ${otp}. Действителен 5 минут.`,
@@ -79,6 +90,38 @@ exports.sendOtp = onCall(
       }
 
       const db = admin.firestore();
+
+      // Test user bypass — no SMS, fixed OTP, pre-seeded profile.
+      if (phoneNumber === TEST_PHONE) {
+        const usersRef = db.collection("users");
+        const snap = await usersRef
+            .where("phoneNumber", "==", phoneNumber).limit(1).get();
+        let userId;
+        const isNewUser = snap.empty;
+        if (isNewUser) {
+          const newUser = usersRef.doc();
+          await newUser.set({
+            phoneNumber,
+            firstName: "User",
+            lastName: "Test",
+            cardNumber: TEST_CARD_NUMBER,
+            cardId: TEST_CARD_DATA.card_id,
+            createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          });
+          userId = newUser.id;
+        } else {
+          userId = snap.docs[0].id;
+        }
+        const verificationId = crypto.randomUUID();
+        await db.collection("otpVerifications").doc(verificationId).set({
+          phoneNumber,
+          userId,
+          otp: TEST_OTP,
+          expiresAt: Date.now() + 5 * 60 * 1000,
+          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        });
+        return {verificationId, isNewUser};
+      }
 
       const phoneHash = crypto
           .createHash("sha256").update(phoneNumber).digest("hex");
@@ -250,6 +293,10 @@ exports.createDiscountCard = onCall(
         );
       }
 
+      if (phoneNumber === TEST_PHONE) {
+        return {...TEST_CARD_DATA, client_name: clientName.trim()};
+      }
+
       try {
         const data = await discountFetch("/card", {
           method: "POST",
@@ -277,6 +324,10 @@ exports.getDiscountCard = onCall(
       const {cardNumber} = request.data;
       if (!cardNumber || typeof cardNumber !== "string") {
         throw new HttpsError("invalid-argument", "cardNumber is required.");
+      }
+
+      if (cardNumber === TEST_CARD_NUMBER) {
+        return TEST_CARD_DATA;
       }
 
       try {
