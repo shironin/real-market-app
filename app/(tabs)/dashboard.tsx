@@ -36,8 +36,8 @@ export default function DashboardScreen() {
     }, [refreshCard]),
   );
 
-  const holderName = card?.client_name
-    ?? [profile?.firstName, profile?.lastName].filter(Boolean).join(' ');
+  const holderName = [profile?.firstName, profile?.lastName].filter(Boolean).join(' ')
+    ?? card?.client_name;
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>

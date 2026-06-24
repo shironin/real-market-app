@@ -22,7 +22,7 @@ import { Typography } from '../theme/typography';
 
 export default function ProfileEditScreen() {
   const { t } = useLanguage();
-  const { profile, refreshProfile } = useAuth();
+  const { profile, updateProfile } = useAuth();
   const { onboarding } = useLocalSearchParams<{ onboarding?: string }>();
   const isOnboarding = onboarding === 'true';
 
@@ -46,11 +46,9 @@ export default function ProfileEditScreen() {
     setLoading(true);
     setError('');
     try {
-      await httpsCallable(getFunctions(undefined, 'europe-central2'), 'updateProfile')({
-        firstName: firstName.trim(),
-        lastName: lastName.trim(),
-      });
-      await refreshProfile();
+      const trimmed = { firstName: firstName.trim(), lastName: lastName.trim() };
+      await httpsCallable(getFunctions(undefined, 'europe-central2'), 'updateProfile')(trimmed);
+      updateProfile(trimmed);
       router.replace('/(tabs)/dashboard');
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : t('errors.generic'));

@@ -86,9 +86,9 @@ exports.sendOtp = onCall(
       await db.runTransaction(async (tx) => {
         const rlSnap = await tx.get(rateLimitRef);
         const now = Date.now();
-        const windowExpired =
-            now - rlSnap.data().windowStart >= RATE_LIMIT_WINDOW_MS;
-        if (!rlSnap.exists || windowExpired) {
+        const elapsed = rlSnap.exists ?
+          now - rlSnap.data().windowStart : Infinity;
+        if (!rlSnap.exists || elapsed >= RATE_LIMIT_WINDOW_MS) {
           tx.set(rateLimitRef, {count: 1, windowStart: now});
         } else if (rlSnap.data().count >= RATE_LIMIT_MAX) {
           throw new HttpsError(
