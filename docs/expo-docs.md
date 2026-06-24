@@ -145,6 +145,66 @@ Any native change (new package, permission, config plugin) requires a full build
 
 ---
 
+## Local builds (when EAS cloud quota is exhausted)
+
+Local builds run the full EAS pipeline on your machine. The resulting artifact is identical to a cloud build and can be submitted the same way.
+
+### Prerequisites
+
+**Both platforms**
+```bash
+npm install -g eas-cli
+eas login
+```
+
+**iOS** — requires macOS + Xcode + Fastlane:
+```bash
+brew install fastlane
+# verify
+which fastlane && fastlane --version
+```
+
+**Android** — requires Java + Android SDK (install via Android Studio, or set `ANDROID_HOME` if already installed):
+```bash
+java --version          # must be Java 17+
+echo $ANDROID_HOME      # must be set
+```
+
+### Build locally
+
+```bash
+# iOS — production .ipa built on this machine
+eas build --platform ios --profile production --local
+
+# Android — production .aab built on this machine
+eas build --platform android --profile production --local
+
+# Both (runs sequentially)
+eas build --platform all --profile production --local
+```
+
+The artifact is saved locally (e.g. `./build-*.ipa` / `./build-*.aab`).
+
+> **appVersionSource caveat:** the project uses `"appVersionSource": "remote"`, which fetches the version number from Expo servers. This still works during local builds as long as you are logged in (`eas login`). If you need to build fully offline, temporarily change it to `"local"` in `eas.json` and set the version in `app.json` manually.
+
+### Submit after a local build
+
+EAS Submit does not consume build quota — it only uploads the artifact.
+
+```bash
+# iOS — submit a local .ipa to App Store Connect / TestFlight
+eas submit --platform ios --path ./path/to/build.ipa --profile production
+
+# Android — submit a local .aab to Google Play (internal track)
+eas submit --platform android --path ./path/to/build.aab --profile production
+```
+
+Alternatively, upload manually:
+- **iOS**: drag the `.ipa` into **Transporter** (free Mac app) or use `xcrun altool`
+- **Android**: upload the `.aab` directly in **Google Play Console → Production / Internal Testing → Create new release**
+
+---
+
 ## Monitoring & utilities
 
 ```bash
