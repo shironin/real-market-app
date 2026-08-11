@@ -65,7 +65,7 @@ function EAN13Barcode({ value, width, height }: { value: string; width: number; 
 }
 
 export function BarcodeCard({
-  cardNumber = '1234567890128',
+  cardNumber,
   holderName,
   isLoading = false,
   error = null,
@@ -97,7 +97,7 @@ export function BarcodeCard({
   const fsBarWidth = screenHeight * 0.82;
   const fsBarHeight = screenWidth * 0.42;
 
-  if (isLoading) {
+  if (isLoading || !cardNumber) {
     return (
       <View style={styles.card}>
         <View style={styles.header}>

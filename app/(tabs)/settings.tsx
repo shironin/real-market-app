@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getFunctions, httpsCallable } from '@react-native-firebase/functions';
 import Constants from 'expo-constants';
 import { router } from 'expo-router';
@@ -6,7 +5,7 @@ import { useState } from 'react';
 import { ActivityIndicator, Alert, Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAuth } from '../../context/AuthContext';
-import { useCard } from '../../context/CardContext';
+import { clearCardCache, useCard } from '../../context/CardContext';
 import { useLanguage } from '../../i18n/LanguageContext';
 import { Colors } from '../../theme/colors';
 import { Typography } from '../../theme/typography';
@@ -83,7 +82,7 @@ export default function SettingsScreen() {
                   cardNumber: card.card_number,
                 });
               }
-              await AsyncStorage.removeItem('@discount_card');
+              if (user) await clearCardCache(user.uid);
               await httpsCallable(fn, 'deleteAccount')({});
               await signOut();
               router.replace('/');

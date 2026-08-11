@@ -32,12 +32,12 @@ export default function DashboardScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      refreshCard();
+      void refreshCard();
     }, [refreshCard]),
   );
 
-  const holderName = [profile?.firstName, profile?.lastName].filter(Boolean).join(' ')
-    ?? card?.client_name;
+  const holderName = card?.client_name
+    ?? [profile?.firstName, profile?.lastName].filter(Boolean).join(' ');
 
   return (
     <SafeAreaView style={styles.safe} edges={['top']}>
@@ -53,7 +53,7 @@ export default function DashboardScreen() {
           holderName={holderName}
           isLoading={loading}
           error={error}
-          onRetry={refreshCard}
+          onRetry={() => { void refreshCard(true); }}
         />
 
         <Text style={styles.sectionSubtitle}>{t('dashboard.cardSubtitle')}</Text>
