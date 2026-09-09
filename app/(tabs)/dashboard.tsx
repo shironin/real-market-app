@@ -9,6 +9,7 @@ import { useCard } from '../../context/CardContext';
 import { Colors } from '../../theme/colors';
 import { Typography } from '../../theme/typography';
 import { LanguageSwitcher } from "../../components/ui/LanguageSwitcher";
+import { SocialLinks } from "../../components/ui/SocialLinks";
 
 const logoImg = require('../../assets/images/logo.png');
 const logoTextImg = require('../../assets/images/logo-text.png');
@@ -57,6 +58,11 @@ export default function DashboardScreen() {
         />
 
         <Text style={styles.sectionSubtitle}>{t('dashboard.cardSubtitle')}</Text>
+
+        <View style={styles.socialsSection}>
+          <Text style={styles.socialsTitle}>{t('dashboard.socialsTitle')}</Text>
+          <SocialLinks />
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -104,5 +110,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
     textAlign: "center"
+  },
+  socialsSection: {
+    gap: 12,
+  },
+  socialsTitle: {
+    ...Typography.title,
+    fontSize: 16,
+    textAlign: 'center',
   },
 });

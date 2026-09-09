@@ -36,6 +36,7 @@ const ro = {
     discount: 'Reducere',
     access: 'Acces',
     validity: 'Valabilitate',
+    socialsTitle: 'Urmăriți-ne pe rețelele sociale',
   },
   settings: {
     title: 'Setări',
@@ -118,6 +119,7 @@ const ru: typeof ro = {
     discount: 'Скидка',
     access: 'Доступ',
     validity: 'Срок',
+    socialsTitle: 'Мы в социальных сетях',
   },
   settings: {
     title: 'Настройки',

@@ -175,7 +175,8 @@ export function CardProvider({ children }: { children: React.ReactNode }) {
               message: err?.message,
               details: err?.details,
             });
-            if (err?.code !== 'functions/not-found') throw err;
+            const errCode = typeof err?.code === 'string' ? err.code.replace('functions/', '') : '';
+            if (errCode !== 'not-found') throw err;
 
             await AsyncStorage.removeItem(cardStorageKey(requestUid));
             const result = await httpsCallable<
