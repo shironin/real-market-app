@@ -15,7 +15,17 @@ const withFirebaseModularHeaders = (config) => {
       if (!podfile.includes('# [firebase] static frameworks')) {
         podfile = podfile.replace(
           'prepare_react_native_project!',
-          'prepare_react_native_project!\n\n# [firebase] static frameworks\nuse_frameworks! :linkage => :static'
+          // Expo's precompiled RNCore artifacts don't always keep up with new
+          // ReactCommon headers added between RN patch versions (e.g. RN 0.86 added
+          // RCTTurboModuleWithJSIBindings.h), which breaks the archive with a
+          // "file not found" error under `use_frameworks!`. Force a source build so
+          // the Pods are compiled from the exact node_modules/react-native checked
+          // out here instead of a possibly-stale prebuilt binary.
+          "ENV['RCT_USE_PREBUILT_RNCORE'] = '0'\n" +
+            "ENV['RCT_USE_RN_DEP'] = '0'\n" +
+            "ENV['EXPO_USE_PRECOMPILED_MODULES'] = '0'\n\n" +
+            'prepare_react_native_project!\n\n' +
+            '# [firebase] static frameworks\nuse_frameworks! :linkage => :static'
         );
         fs.writeFileSync(podfilePath, podfile);
       }

@@ -11,17 +11,17 @@ interface SocialLink {
 
 const FACEBOOK_LINKS: SocialLink[] = [
   {
-    label: 'Viking Singerei',
+    label: 'Viking',
     url: 'https://www.facebook.com/groups/305536016639924',
     icon: 'logo-facebook',
   },
   {
-    label: 'RealMarket Singerei',
+    label: 'RealMarket',
     url: 'https://www.facebook.com/profile.php?id=100093050927173',
     icon: 'logo-facebook',
   },
   {
-    label: 'Melissa Singerei',
+    label: 'Melissa',
     url: 'https://www.facebook.com/melissa.singerei',
     icon: 'logo-facebook',
   },
@@ -29,17 +29,17 @@ const FACEBOOK_LINKS: SocialLink[] = [
 
 const TIKTOK_LINKS: SocialLink[] = [
   {
-    label: 'Viking Singerei',
+    label: 'Viking',
     url: 'https://www.tiktok.com/@magazinviking',
     icon: 'logo-tiktok',
   },
   {
-    label: 'RealMarket Singerei',
+    label: 'RealMarket',
     url: 'https://www.tiktok.com/@realmarket.md',
     icon: 'logo-tiktok',
   },
   {
-    label: 'Melissa Singerei',
+    label: 'Melissa',
     url: 'https://www.tiktok.com/@melissasingerei0',
     icon: 'logo-tiktok',
   },

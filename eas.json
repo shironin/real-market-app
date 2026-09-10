@@ -22,6 +22,11 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "android": {
+        "serviceAccountKeyPath": "./real-market-c705b-c018af7017c0.json",
+        "track": "internal"
+      }
+    }
   }
 }

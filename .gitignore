@@ -1,5 +1,7 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
+.idea
+
 # dependencies
 node_modules/
 
@@ -32,6 +34,14 @@ yarn-error.*
 
 # local env files
 .env*.local
+
+# Firebase / Google service credentials
+# NOTE: GoogleService-Info.plist and google-services.json must stay
+# un-ignored — `eas build --local` copies its temp workspace based on
+# git's tracked/untracked-but-not-ignored file set, and app.json's
+# googleServicesFile prebuild step needs them present there.
+*-c018af7017c0.json
+real-market-c705b-*.json
 
 # typescript
 *.tsbuildinfo
